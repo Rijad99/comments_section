@@ -1,0 +1,289 @@
+/* Font */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+
+
+/* Variables */
+
+/* Primary */
+$moderateBlue: hsl(238, 40%, 52%);
+$softRed: hsl(358, 79%, 66%);
+$lightGrayishBlue: hsl(239, 57%, 85%);
+$paleRed: hsl(357, 100%, 86%);
+/* Neutral */
+$darkBlue: hsl(212, 24%, 26%);
+$grayishBlue: hsl(211, 10%, 45%);
+$lightGray: hsl(223, 19%, 93%);
+$veryLightGray: hsl(228, 33%, 97%);
+$white: hsl(0, 0%, 100%);
+
+
+
+/* Reset */
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $lightGray;
+    font-family: "Poppins", sans-serif;
+    overflow-x: hidden;
+}
+
+button {
+    font-size: 0.75rem;
+    font-weight: 600;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    img {
+        margin-right: 0.35rem;
+    }
+}
+
+.btn-delete {
+    color: $softRed;
+    margin-right: 1rem;
+}
+
+.btn-edit, .btn-reply {
+    color: $moderateBlue;
+}
+
+.btn-expand {
+    color: $darkBlue;
+}
+
+
+
+/* Helpers */
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.8rem 25vw;
+}
+
+.card {
+    min-width: 450px;
+    max-width: 600px;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0.75rem;
+    background-color: $white;
+}
+
+.button-group-vote {
+    height: 75px;
+    margin-right: 1.5rem;
+    padding: 1.25rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    background-color: $lightGray;
+
+    span {
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: $moderateBlue;
+        margin: 0.5rem 0;
+    }
+
+    button {
+
+        img {
+            margin-right: unset;
+        }
+    }
+}
+
+
+
+/* Comments Section */
+
+.comments {
+    height: calc(100vh - 185px);
+    max-height: calc(100vh - 185px);
+    overflow-x: hidden;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .comment-card {
+        max-height: 175px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+
+        .button-group {
+            margin-right: 1.5rem;
+        }
+
+        .comment {
+
+            .comment-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .user-info {
+                    display: flex;
+                    align-items: center;
+
+                    .circle {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin-right: 0.5rem;
+
+                        img {
+                            width: 1.8rem;
+                        }
+                    }
+
+                    span {
+                        font-size: 0.75rem;
+                    }
+
+                    .name, .date {
+                        font-weight: 600;
+                    }
+
+                    .date {
+                        margin-left: 0.5rem;
+                        font-size: 0.65rem;
+                        color: rgba($grayishBlue, 0.75);
+                    }
+
+                    .you {
+                        display: inline-block;
+                        vertical-align: middle;
+                        line-height: 1.9em;
+                        background-color: $moderateBlue;
+                        color: $white;
+                        padding: 0 0.35rem;
+                        margin-left: 0.5rem;
+                        border-radius: 0.25rem;
+                    }
+                }
+
+                .button-group {
+                    display: flex;
+                    margin-right: unset;
+                }
+            }
+
+            .comment-body {
+                margin-top: 1rem;
+
+                p {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    display: -webkit-box !important;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient:  vertical;
+                    white-space: normal;
+                    font-weight: 500;
+                    font-size: 0.75rem;
+                    color: $grayishBlue;
+                }
+            }
+
+            .comment-footer {
+                margin-top: 0.75rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .replies {
+                    width: 225px;
+                    max-width: 225px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    font-size: 0.7rem;
+                    color: rgba($grayishBlue, 0.75);
+                }
+            }
+        }
+    }
+}
+
+#new-comment {
+    margin-top: 1.5rem;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .circle {
+        display: flex;
+        align-items: center;
+
+        img {
+            width: 3rem;
+        }
+    }
+
+    textarea {
+        width: 100%;
+        border: 1px solid $lightGray;
+        resize: none;
+        font-size: 0.75rem;
+        font-family: "Poppins", sans-serif;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        margin: 0 1.5rem;
+    
+        ::placeholder {
+            font-size: 0.75rem;
+            font-family: "Poppins", sans-serif;
+        }
+    }
+
+    .btn-send {
+        background-color: $moderateBlue;
+        padding: 0.75rem 1.5rem;
+        border-radius: 	0.5rem;
+        color: $white;
+    }
+}
+
+
+
+/* Media Queries */
+
+@media screen and(max-width: 900px) {
+
+    .container {
+        width: unset;
+        padding: 3vh 15vw;
+    }
+
+    .card {
+        width: 100%;
+    }
+}
