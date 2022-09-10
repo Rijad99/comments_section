@@ -29,11 +29,11 @@ button {
   font-weight: 600;
   background-color: transparent;
   border: 0;
-  cursor: pointer;
   transition: all 300ms ease-in-out;
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
 }
 button img {
   margin-right: 0.35rem;
@@ -42,6 +42,7 @@ button img {
 .btn-delete {
   color: hsl(358deg, 79%, 66%);
   margin-right: 1rem;
+  z-index: 1;
 }
 
 .btn-edit, .btn-reply {
@@ -49,7 +50,10 @@ button img {
 }
 
 .btn-expand {
-  color: hsl(212deg, 24%, 26%);
+  padding: 0.5rem;
+  background-color: hsl(238deg, 40%, 52%);
+  color: hsl(223deg, 19%, 93%);
+  border-radius: 0.35rem;
 }
 
 /* Helpers */
@@ -59,7 +63,7 @@ button img {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.8rem 25vw;
+  padding: 1.8rem 20vw;
 }
 
 .card {
@@ -72,8 +76,8 @@ button img {
 
 .button-group-vote {
   height: 75px;
+  width: 40px;
   margin-right: 1.5rem;
-  padding: 1.25rem 0.75rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -95,6 +99,7 @@ button img {
 .comments {
   height: calc(100vh - 185px);
   max-height: calc(100vh - 185px);
+  padding: 2rem;
   overflow-x: hidden;
   width: 100%;
   display: flex;
@@ -102,13 +107,19 @@ button img {
   align-items: center;
 }
 .comments .comment-card {
+  width: 100%;
   max-height: 175px;
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
+  transition: all 200ms ease;
+  box-shadow: 0 0 15px rgba(195, 196, 239, 0.25);
 }
 .comments .comment-card .button-group {
   margin-right: 1.5rem;
+}
+.comments .comment-card .comment {
+  width: 100%;
 }
 .comments .comment-card .comment .comment-header {
   display: flex;
@@ -144,6 +155,8 @@ button img {
   vertical-align: middle;
   line-height: 1.9em;
   background-color: hsl(238deg, 40%, 52%);
+  font-size: 0.7rem;
+  font-weight: 600;
   color: hsl(0deg, 0%, 100%);
   padding: 0 0.35rem;
   margin-left: 0.5rem;
@@ -154,6 +167,7 @@ button img {
   margin-right: unset;
 }
 .comments .comment-card .comment .comment-body {
+  position: relative;
   margin-top: 1rem;
 }
 .comments .comment-card .comment .comment-body p {
@@ -163,29 +177,58 @@ button img {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   white-space: normal;
+  word-break: break-all;
   font-weight: 500;
   font-size: 0.75rem;
   color: hsl(211deg, 10%, 45%);
+}
+.comments .comment-card .comment .comment-body p:hover + .popover {
+  transform: scale(1);
+  opacity: 1;
+  z-index: 2;
+}
+.comments .comment-card .comment .comment-body .popover {
+  position: absolute;
+  bottom: -5.25rem;
+  left: 0.6rem;
+  background-color: hsl(212deg, 24%, 26%);
+  padding: 0.8rem;
+  font-weight: 400;
+  font-size: 0.7rem;
+  word-break: break-all;
+  color: hsl(223deg, 19%, 93%);
+  border-radius: 0.5rem;
+  transition: all 200ms ease;
+  transform: scale(0.75);
+  opacity: 0;
 }
 .comments .comment-card .comment .comment-footer {
   margin-top: 0.75rem;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 .comments .comment-card .comment .comment-footer .replies {
-  width: 225px;
-  max-width: 225px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   font-size: 0.7rem;
   color: rgba(103, 114, 126, 0.75);
 }
+.comments .comment-card:hover {
+  box-shadow: 0 0 15px rgba(195, 196, 239, 0.4);
+}
+.comments .replied-comments {
+  padding: 0 0 1.5rem 0;
+  display: none;
+}
+.comments .replied-comments.show-replies {
+  display: block;
+}
 
 #new-comment {
   margin-top: 1.5rem;
-  width: 100%;
+  width: calc(100% - 4rem);
   height: 100px;
   display: flex;
   justify-content: space-between;
@@ -204,9 +247,10 @@ button img {
   resize: none;
   font-size: 0.75rem;
   font-family: "Poppins", sans-serif;
-  padding: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 0.25rem;
   margin: 0 1.5rem;
+  outline: none;
 }
 #new-comment textarea ::-moz-placeholder {
   font-size: 0.75rem;
@@ -220,7 +264,7 @@ button img {
   font-size: 0.75rem;
   font-family: "Poppins", sans-serif;
 }
-#new-comment .btn-send {
+#new-comment .btn-add {
   background-color: hsl(238deg, 40%, 52%);
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -228,6 +272,12 @@ button img {
 }
 
 /* Media Queries */
+@media screen and (max-width: 1180px) {
+  .replies {
+    max-width: 250px;
+    width: 250px;
+  }
+}
 @media screen and (max-width: 900px) {
   .container {
     width: unset;
@@ -235,5 +285,11 @@ button img {
   }
   .card {
     width: 100%;
+  }
+}
+@media screen and (max-width: 600px) {
+  .replies {
+    max-width: 200px;
+    width: 200px;
   }
 }/*# sourceMappingURL=comments_section.css.map */

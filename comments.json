@@ -1,0 +1,104 @@
+[
+    {
+        "user": {
+            "id": 17,
+            "username": "juliusomo",
+            "avatar": "juliusomo.png"
+        },
+        "content": {
+            "id": 7,
+            "comment": "Woah, your project look awesome! How long have you been coding for? I'm still new, but think I want to dive into React as well soon.",
+            "createdAt": "1 day ago",
+            "votes": 5,
+            "repliesBy": []
+        }
+    },
+    {
+        "user": {
+            "id": 12,
+            "username": "amyrobson",
+            "avatar": "amyrobson.png"
+        },
+        "content": {
+            "id": 1,
+            "comment": "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
+            "createdAt": "1 month ago",
+            "votes": 12,
+            "repliesBy": ["ramsesmiron", "juliusomo", "maxblagun", "ramsesmiron", "juliusomo", "maxblagun"]
+        },
+        "replies": [
+            {
+                "user": {
+                    "id": 4,
+                    "username": "ramsesmiron",
+                    "avatar": "ramsesmiron.png"
+                },
+                "content": {
+                    "id": 2,
+                    "comment": "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
+                    "createdAt": "13 days ago",
+                    "votes": 0,
+                    "repliesBy": []
+                }
+            },
+            {
+                "user": {
+                    "id": 17,
+                    "username": "juliusomo",
+                    "avatar": "juliusomo.png"
+                },
+                "content": {
+                    "id": 5,
+                    "comment": "Woah, your project look awesome! How long have you been coding for? I'm still new, but think I want to dive into React as well soon. Perhaps you can give me an insigh on where I can learn React? Thanks!",
+                    "createdAt": "13 days ago",
+                    "votes": 1,
+                    "repliesBy": []
+                }
+            }
+        ]
+    },
+    {
+        "user": {
+            "id": 9,
+            "username": "maxblagun",
+            "avatar": "maxblagun.png"
+        },
+        "content": {
+            "id": 3,
+            "comment": "Woah, your project look awesome! How long have you been coding for? I'm still new, but think I want to dive into React as well soon. Perhaps you can give me an insigh on where I can learn React? Thanks!",
+            "createdAt": "1 month ago",
+            "votes": 5,
+            "repliesBy": ["ramsesmiron"]
+        }
+    },
+    {
+        "user": {
+            "id": 12,
+            "username": "amyrobson",
+            "avatar": "amyrobson.png"
+        },
+        "content": {
+            "id": 4,
+            "comment": "Woah, your project look awesome! How long have you been coding for? I'm still new, but think I want to dive into React as well soon. Perhaps you can give me an insigh on where I can learn React? Thanks!",
+            "createdAt": "2 days ago",
+            "votes": 7,
+            "repliesBy": ["ramsesmiron", "maxblagun"]
+        },
+        "replies": [
+            {
+                "user": {
+                    "id": 17,
+                    "username": "juliusomo",
+                    "avatar": "juliusomo.png"
+                },
+                "content": {
+                    "id": 6,
+                    "comment": "Woah, your project look awesome! How long have you been coding for? I'm still new, but think I want to dive into React as well soon. Perhaps you can give me an insigh on where I can learn React? Thanks!",
+                    "createdAt": "15 minutes ago",
+                    "votes": 0,
+                    "repliesBy": []
+                }
+            }
+        ]
+    }
+]
