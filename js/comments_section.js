@@ -280,8 +280,8 @@ const addComment = () => {
         const commentData = {
             user: {
                 id: 17,
-                username: "juliusomo",
-                avatar: "juliusomo.png"
+                username: loggedInUser.username,
+                avatar: loggedInUser.avatar
             },
             content: {
                 id: newCommentID,
