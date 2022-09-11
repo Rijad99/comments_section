@@ -6,8 +6,28 @@ const loggedInUser = {
 
 
 
-getData("../../comments.json")
+if (JSON.parse(localStorage.getItem("comments")) === null) {
+    localStorage.setItem("comments", JSON.stringify([]))
+}
+
+
+
+if  (JSON.parse(localStorage.getItem("comments")).length === 0) {
+
+    getData("../../comments.json")
     .then(data => drawComments(data))
+
+} else {
+
+    getData("../../comments.json")
+    .then(data => {
+        const commentsFromLocalStorage = JSON.parse(localStorage.getItem("comments"))
+
+        const allComments = [...data, ...commentsFromLocalStorage]
+
+        drawComments(allComments)
+    })
+}
 
 
 
@@ -54,7 +74,6 @@ const drawComments = data => {
                         `
                             <div class="button-group">
                                     <button class="btn btn-delete" onclick=deleteComment(${d.content.id})><img src="../images/icon-delete.svg" />Delete</button>
-                                    <button class="btn btn-edit"><img src="../images/icon-edit.svg" />Edit</button>
                             </div>
                         `
 
@@ -144,7 +163,6 @@ const drawComments = data => {
                             `
                                 <div class="button-group">
                                         <button class="btn btn-delete" onclick=deleteComment(${reply.content.id})><img src="../images/icon-delete.svg" />Delete</button>
-                                        <button class="btn btn-edit"><img src="../images/icon-edit.svg" />Edit</button>
                                 </div>
                             `
 
@@ -185,6 +203,11 @@ const deleteComment = id => {
     const comment = document.getElementById(`comment-${loggedInUser.id}-${id}`)
 
     comment.remove()
+
+    const commentsFromLocalStorage = JSON.parse(localStorage.getItem("comments"))
+    const newComments = commentsFromLocalStorage.filter(c => c.content?.id !== id)
+
+    localStorage.setItem("comments", JSON.stringify(newComments))
 }
 
 const expandReplies = id => {
@@ -224,20 +247,50 @@ const addComment = () => {
     const commentsContainer = document.getElementById("comments")
 
     let arrayOfCommentsIDs = []
+    let lastCommentID = null
+    let newCommentID = null
 
     getData("../../comments.json")
     .then(data => {
 
-        fillArray(data, arrayOfCommentsIDs)
+        if (JSON.parse(localStorage.getItem("comments")).length === 0) {
 
-        const lastCommentID = Math.max(...arrayOfCommentsIDs)
-        const newCommentID = lastCommentID + 1
+            fillArray(data, arrayOfCommentsIDs)
+
+            lastCommentID = Math.max(...arrayOfCommentsIDs)
+            newCommentID = lastCommentID + 1
+
+        } else {
+            const allComments = JSON.parse(localStorage.getItem("comments"))
+
+            allComments.forEach(c => {
+                arrayOfCommentsIDs.push(c.content.id)
+
+                lastCommentID = Math.max(...arrayOfCommentsIDs)
+                newCommentID = lastCommentID + 1
+            })
+        }
 
         const comment = document.createElement("div")
         comment.id = `comment-${loggedInUser.id}-${newCommentID}`
         comment.className = "card comment-card"
 
         const numberOfLetters = newComment.value.split(" ").join("").length
+
+        const commentData = {
+            user: {
+                id: 17,
+                username: "juliusomo",
+                avatar: "juliusomo.png"
+            },
+            content: {
+                id: newCommentID,
+                comment: newComment.value,
+                createdAt: "Now",
+                votes: 0,
+                repliesBy: []
+            }
+        }
     
         comment.innerHTML = `
             <div class="button-group-vote">
@@ -261,7 +314,6 @@ const addComment = () => {
                     </div>
                     <div class="button-group">
                         <button class="btn btn-delete" onclick=deleteComment(${newCommentID})><img src="../images/icon-delete.svg" />Delete</button>
-                        <button class="btn btn-edit"><img src="../images/icon-edit.svg" />Edit</button>
                     </div>
                 </div>
     
@@ -280,6 +332,11 @@ const addComment = () => {
         commentsContainer.appendChild(comment)
 
         newComment.value = ""
+
+        const allComments = JSON.parse(localStorage.getItem("comments")) || [];
+        allComments.push(commentData)
+
+        localStorage.setItem("comments", JSON.stringify(allComments))
     })
 }
 

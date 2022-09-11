@@ -30,6 +30,7 @@ $white: hsl(0, 0%, 100%);
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 
 body {
@@ -60,11 +61,10 @@ button {
 
 .btn-delete {
     color: $softRed;
-    margin-right: 1rem;
     z-index: 1;
 }
 
-.btn-edit, .btn-reply {
+.btn-reply {
     color: $moderateBlue;
 }
 
@@ -265,18 +265,18 @@ button {
         &:hover {
             box-shadow: 0 0 15px rgba($lightGrayishBlue, 0.4);
         }
+
+        &:last-child {
+            margin-bottom: 2rem;
+        }
     }
 
     .replied-comments {
-        // visibility: hidden;
-        // opacity: 0;
         padding: 0 0 1.5rem 0;
         display: none;
     }
 
     .replied-comments.show-replies {
-        // visibility: visible;
-        // opacity: 1;
         display: block;
     }
 }
