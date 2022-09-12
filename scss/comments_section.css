@@ -184,11 +184,38 @@ button img {
   font-weight: 500;
   font-size: 0.75rem;
   color: hsl(211deg, 10%, 45%);
+  transition: all 200ms ease-in-out;
 }
 .comments .comment-card .comment .comment-body p:hover + .popover {
   transform: scale(1);
   opacity: 1;
   z-index: 2;
+}
+.comments .comment-card .comment .comment-body p:hover[contenteditable=true] {
+  border: none;
+  outline: none;
+}
+.comments .comment-card .comment .comment-body p:focus[contenteditable=true] {
+  border: none;
+  outline: none;
+}
+.comments .comment-card .comment .comment-body .my-comment:hover, .comments .comment-card .comment .comment-body .my-comment:focus {
+  color: hsl(212deg, 24%, 26%);
+}
+.comments .comment-card .comment .comment-body .my-comment:focus {
+  height: 36px !important;
+  max-height: 36px !important;
+  overflow-y: auto !important;
+  text-overflow: unset;
+  overflow: unset;
+  display: unset;
+  -webkit-line-clamp: unset;
+  -webkit-box-orient: unset;
+  white-space: unset;
+}
+.comments .comment-card .comment .comment-body .my-comment:focus + .popover {
+  opacity: 0;
+  visibility: hidden;
 }
 .comments .comment-card .comment .comment-body .popover {
   position: absolute;

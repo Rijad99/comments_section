@@ -82,7 +82,12 @@ const drawComments = data => {
                 </div>
 
                 <div class="comment-body">
-                    <p>${d.content.comment}</p>
+
+                        ${d.user.id === loggedInUser.id ?
+                        
+                            `<p contenteditable=true class="my-comment" spellcheck="false">${d.content.comment}</p>`
+                        
+                        : `<p>${d.content.comment}</p>`}                  
                     
                     ${numberOfLetters > 130 ? 
                     
@@ -171,7 +176,12 @@ const drawComments = data => {
                     </div>
 
                     <div class="comment-body">
-                        <p>${reply.content.comment}</p>
+
+                        ${reply.user.id === loggedInUser.id ?
+                        
+                            `<p contenteditable=true class="my-comment" spellcheck="false">${reply.content.comment}</p>`
+                        
+                        : `<p>${reply.content.comment}</p>`}          
 
                         ${numberOfLetters > 130 ? 
                     
@@ -279,7 +289,7 @@ const addComment = () => {
 
         const commentData = {
             user: {
-                id: 17,
+                id: loggedInUser.id,
                 username: loggedInUser.username,
                 avatar: loggedInUser.avatar
             },
@@ -318,7 +328,8 @@ const addComment = () => {
                 </div>
     
                 <div class="comment-body">
-                    <p>${newComment.value}</p>
+                
+                    <p contenteditable=true class="my-comment" spellcheck="false">${newComment.value}</p>
 
                     ${numberOfLetters > 130 ? 
                     

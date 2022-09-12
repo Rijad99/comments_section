@@ -221,11 +221,46 @@ button {
                     font-weight: 500;
                     font-size: 0.75rem;
                     color: $grayishBlue;
+                    transition: all 200ms ease-in-out;
 
                     &:hover + .popover {
                         transform: scale(1);
                         opacity: 1;
                         z-index: 2;
+                    }
+
+                    &:hover[contenteditable="true"] {
+                        border: none;
+                        outline: none;
+                    }
+
+                    &:focus[contenteditable="true"] {
+                        border: none;
+                        outline: none;
+                    }
+                }
+
+                .my-comment {
+
+                    &:hover, &:focus {
+                        color: $darkBlue;
+                    }
+
+                    &:focus {
+                        height: 36px !important;
+                        max-height: 36px !important;
+                        overflow-y: auto !important;
+                        text-overflow: unset;
+                        overflow: unset;
+                        display: unset;
+                        -webkit-line-clamp: unset;
+                        -webkit-box-orient:  unset;
+                        white-space: unset;
+                    }
+
+                    &:focus + .popover {
+                        opacity: 0;
+                        visibility: hidden;
                     }
                 }
 
