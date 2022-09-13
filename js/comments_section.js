@@ -73,7 +73,8 @@ const drawComments = data => {
                         
                         `
                             <div class="button-group">
-                                    <button class="btn btn-delete" onclick=createDeleteModal(${d.content.id})><img src="../images/icon-delete.svg" />Delete</button>
+                                <button class="btn btn-save-changes"><img src="../images/icon-save.svg" class="icon-save" /></button>
+                                <button class="btn btn-delete" onclick=createDeleteModal(${d.content.id})><img src="../images/icon-delete.svg" />Delete</button>
                             </div>
                         `
 
@@ -85,7 +86,7 @@ const drawComments = data => {
 
                         ${d.user.id === loggedInUser.id ?
                         
-                            `<p contenteditable=true class="my-comment" spellcheck="false">${d.content.comment}</p>`
+                            `<p contenteditable=true class="my-comment" spellcheck="false" onkeyup=editComment(${d.content.id})>${d.content.comment}</p>`
                         
                         : `<p>${d.content.comment}</p>`}                  
                     
@@ -179,7 +180,7 @@ const drawComments = data => {
 
                         ${reply.user.id === loggedInUser.id ?
                         
-                            `<p contenteditable=true class="my-comment" spellcheck="false">${reply.content.comment}</p>`
+                            `<p contenteditable=true class="my-comment" spellcheck="false" onkeyup=editComment(${reply.content.id})>${reply.content.comment}</p>`
                         
                         : `<p>${reply.content.comment}</p>`}          
 
@@ -357,7 +358,7 @@ const addComment = () => {
     
                 <div class="comment-body">
                 
-                    <p contenteditable=true class="my-comment" spellcheck="false">${newComment.value}</p>
+                    <p contenteditable=true class="my-comment" spellcheck="false" onkeyup=editComment(${newCommentID})>${newComment.value}</p>
 
                     ${numberOfLetters > 130 ? 
                     
@@ -376,6 +377,31 @@ const addComment = () => {
         allComments.push(commentData)
 
         localStorage.setItem("comments", JSON.stringify(allComments))
+    })
+}
+
+const editComment = (id) => {
+    const comment = document.getElementById(`comment-${loggedInUser.id}-${id}`)
+    const p = comment.querySelector(".comment-body p")
+    const btnSave = comment.querySelector(".btn-save-changes")
+
+    const commentsFromLocalStorage = JSON.parse(localStorage.getItem("comments"))
+    const commentToEdit = commentsFromLocalStorage.filter(c => c.content.id === id)[0]
+    const rest = commentsFromLocalStorage.filter(c => c.content.id !== id)
+
+    if (p.textContent !== commentToEdit.content.comment) {
+        btnSave.classList.add("show-save")
+    } else {
+        btnSave.classList.remove("show-save")
+    }
+
+    btnSave.addEventListener("click", () => {
+        const editedComment = { ...commentToEdit, content: { ...commentToEdit.content, comment: p.textContent }}
+
+        const newComments = [editedComment, ...rest].sort((a, b) => a.content.id - b?.content?.id)
+        localStorage.setItem("comments", JSON.stringify(newComments))
+
+        btnSave.classList.remove("show-save")
     })
 }
 
