@@ -12,22 +12,22 @@ if (JSON.parse(localStorage.getItem("comments")) === null) {
 
 
 
-if  (JSON.parse(localStorage.getItem("comments")).length === 0) {
+// if  (JSON.parse(localStorage.getItem("comments")).length === 0) {
 
-    getData("../../comments.json")
-    .then(data => drawComments(data))
+//     getData("../../comments.json")
+//     .then(data => drawComments(data))
 
-} else {
+// } else {
 
-    getData("../../comments.json")
-    .then(data => {
-        const commentsFromLocalStorage = JSON.parse(localStorage.getItem("comments"))
+//     getData("../../comments.json")
+//     .then(data => {
+//         const commentsFromLocalStorage = JSON.parse(localStorage.getItem("comments"))
 
-        const allComments = [...data, ...commentsFromLocalStorage]
+//         const allComments = [...data, ...commentsFromLocalStorage]
 
-        drawComments(allComments)
-    })
-}
+//         drawComments(allComments)
+//     })
+// }
 
 
 
@@ -403,6 +403,15 @@ const editComment = (id) => {
 
         btnSave.classList.remove("show-save")
     })
+}
+
+
+
+if  (JSON.parse(localStorage.getItem("comments")).length > 0) {
+    
+    const commentsFromLocalStorage = JSON.parse(localStorage.getItem("comments"))
+
+    drawComments(commentsFromLocalStorage)
 }
 
 
