@@ -73,7 +73,7 @@ const drawComments = data => {
                         
                         `
                             <div class="button-group">
-                                    <button class="btn btn-delete" onclick=deleteComment(${d.content.id})><img src="../images/icon-delete.svg" />Delete</button>
+                                    <button class="btn btn-delete" onclick=createDeleteModal(${d.content.id})><img src="../images/icon-delete.svg" />Delete</button>
                             </div>
                         `
 
@@ -167,7 +167,7 @@ const drawComments = data => {
                         
                             `
                                 <div class="button-group">
-                                        <button class="btn btn-delete" onclick=deleteComment(${reply.content.id})><img src="../images/icon-delete.svg" />Delete</button>
+                                        <button class="btn btn-delete" onclick=createDeleteModal(${reply.content.id})><img src="../images/icon-delete.svg" />Delete</button>
                                 </div>
                             `
 
@@ -207,8 +207,6 @@ const drawComments = data => {
     })
 }
 
-
-
 const deleteComment = id => {
     const comment = document.getElementById(`comment-${loggedInUser.id}-${id}`)
 
@@ -218,6 +216,8 @@ const deleteComment = id => {
     const newComments = commentsFromLocalStorage.filter(c => c.content?.id !== id)
 
     localStorage.setItem("comments", JSON.stringify(newComments))
+
+    closeModal()
 }
 
 const expandReplies = id => {
@@ -250,6 +250,34 @@ const voteDown = id => {
 
         return currentVotes
     }
+}
+
+const createDeleteModal = (id) => {
+    const overlay = document.createElement("div")
+    const modal = document.createElement("div")
+
+    overlay.className = "overlay"
+    modal.className = "modal modal-delete"
+
+    modal.innerHTML = `
+        <div class="modal-header">
+            <h3>Delete comment</h3>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete this comment? This will remove the comment and can't be undone</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-cancel" onclick=closeModal()>No, Cancel</button>
+            <button class="btn btn-confirm" onclick=deleteComment(${id})>Yes, Delete</button>
+        </div>
+    `
+
+    overlay.appendChild(modal)
+    document.body.appendChild(overlay)
+}
+
+const closeModal = () => {
+    document.querySelector(".overlay").remove()
 }
 
 const addComment = () => {
@@ -323,7 +351,7 @@ const addComment = () => {
                         <span class="date">Now</span>
                     </div>
                     <div class="button-group">
-                        <button class="btn btn-delete" onclick=deleteComment(${newCommentID})><img src="../images/icon-delete.svg" />Delete</button>
+                        <button class="btn btn-delete" onclick=createDeleteModal(${newCommentID})><img src="../images/icon-delete.svg" />Delete</button>
                     </div>
                 </div>
     
