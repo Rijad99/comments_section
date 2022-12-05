@@ -1,7 +1,15 @@
+//Change user
+
+// const loggedInUser = {
+//     id: 19,
+//     username: "maxblagun",
+//     avatar: "maxblagun.png"
+// }
+
 const loggedInUser = {
-    id: 17,
-    username: "juliusomo",
-    avatar: "juliusomo.png"
+    id: 20,
+    username: "amyrobson",
+    avatar: "amyrobson.png"
 }
 
 
@@ -10,32 +18,16 @@ if (JSON.parse(localStorage.getItem("comments")) === null) {
     localStorage.setItem("comments", JSON.stringify([]))
 }
 
-
-
-// if  (JSON.parse(localStorage.getItem("comments")).length === 0) {
-
-//     getData("../../comments.json")
-//     .then(data => drawComments(data))
-
-// } else {
-
-//     getData("../../comments.json")
-//     .then(data => {
-//         const commentsFromLocalStorage = JSON.parse(localStorage.getItem("comments"))
-
-//         const allComments = [...data, ...commentsFromLocalStorage]
-
-//         drawComments(allComments)
-//     })
-// }
+if (JSON.parse(localStorage.getItem("replies")) === null) {
+    localStorage.setItem("replies", JSON.stringify([]))
+}
 
 
 
-const drawComments = data => {
+const drawComments = (commentsData, repliesData) => {
     const commentsContainer = document.getElementById("comments")
 
-    data.forEach((d, i) => {
-
+    commentsData.forEach((d, i) => {
         const numberOfLetters = d.content.comment.split(" ").join("").length
         
         const comment = document.createElement("div")
@@ -86,7 +78,7 @@ const drawComments = data => {
 
                         ${d.user.id === loggedInUser.id ?
                         
-                            `<p contenteditable=true class="my-comment" spellcheck="false" onkeyup=editComment(${d.content.id})>${d.content.comment}</p>`
+                            `<p contenteditable=true class="my-comment" spellcheck="false" onkeyup="editComment(event, ${d.content.id})">${d.content.comment}</p>`
                         
                         : `<p>${d.content.comment}</p>`}                  
                     
@@ -98,25 +90,30 @@ const drawComments = data => {
 
                 </div>
 
-                ${d.content.repliesBy.length > 0 ?           
+                ${repliesData.length > 0 ?           
                     `
                         <div class="comment-footer">
-                            <div class="replies">
-                                
-                                ${
-                                    d.content.repliesBy.length > 2 
-                                    ?           
-                                    (d.content.repliesBy.slice(0, 2).join(", ") + " and " + d.content.repliesBy.slice(2, d.content.repliesBy.length).length + " others replied to this comment.") 
-                                    : 
-                                    d.content.repliesBy.length === 1 ? (d.content.repliesBy + " replied to this comment.") : d.content.repliesBy.length === 2 
-                                    && 
-                                    (d.content.repliesBy.join(" & ") + " replied to this comment.")}
 
-                            </div>
-
-                            ${d.replies?.length > 0 ?
+                            ${d.content.repliesBy.length > 0 ?
                             
-                                `<button id="btn-expand" class="btn btn-expand" onclick=expandReplies(${d.content.id})>Expand</button>`
+                                `<div class="replies">
+                                
+                                    ${
+                                        d.content.repliesBy.length > 2 
+                                        ?           
+                                        (d.content.repliesBy.slice(0, 2).join(", ") + " and " + d.content.repliesBy.slice(2, d.content.repliesBy.length).length + " others replied to this comment.") 
+                                        : 
+                                        d.content.repliesBy.length === 1 ? (d.content.repliesBy + " replied to this comment.") : d.content.repliesBy.length === 2 
+                                        && 
+                                        (d.content.repliesBy.join(" & ") + " replied to this comment.")}
+
+                            </div>`
+
+                            : ""}
+
+                            ${repliesData[i].replies.length > 0 ?
+                            
+                                `<button id="btn-expand" class="btn btn-expand" onclick="expandReplies(${d.content.id})">Expand</button>`
 
                             : ""}
                             
@@ -127,85 +124,93 @@ const drawComments = data => {
         `
 
         commentsContainer.appendChild(comment)
+    })
+}
 
-        const repliedCommentsContainer = d.replies && document.createElement("div")
+const drawReplies = (repliesData, commentsData) => {
 
-        d.replies?.forEach(reply => {
-            const repliedComment = document.createElement("div")
-            repliedComment.id = `comment-${loggedInUser.id}-${reply.content.id}`
-            repliedComment.className = "card comment-card"
+    if (repliesData.length > 0) {
 
-            const numberOfLetters = reply.content.comment.split(" ").join("").length
+        commentsData.forEach((d, i) => {
 
-            repliedComment.innerHTML = `
-                <div class="button-group-vote">
-                    <button class="btn-vote-up" onclick=voteUp(${reply.content.id})>
-                        <img src="../images/icon-plus.svg" />
-                    </button>
-                    <span id="comment-${reply.content.id}-votes">${reply.content.votes}</span>
-                    <button class="btn-vote-up" onclick=voteDown(${reply.content.id})>
-                        <img src="../images/icon-minus.svg" />
-                    </button>
-                </div>
-                <div class="comment">
-                    <div class="comment-header">
-                        <div class="user-info">
-                            <div class="circle">
-                                <img src="../images/avatars/image-${reply.user.avatar}" />
+            const repliedCommentsContainer = document.createElement("div")
+            repliedCommentsContainer.className = "replied-comments"
+            repliedCommentsContainer.id = `replied-comments-${d.content.id}`
+
+            let commentToAddReplyTo = document.getElementById(`comment-${d.user.id}-${d.content.id}`)
+
+            repliesData[i].replies.forEach((r, j) => {    
+
+                const repliedComment = document.createElement("div")
+                repliedComment.id = `comment-${r.user.id}-${r.content.id}-20`
+                repliedComment.className = "card comment-card"
+
+                    const numberOfLetters = r.content.comment.split(" ").join("").length
+
+                    repliedComment.innerHTML = `
+                    <div class="button-group-vote">
+                        <button class="btn-vote-up" onclick=voteUp(${r.content.id})>
+                            <img src="../images/icon-plus.svg" />
+                        </button>
+                        <span id="comment-${r.content.id}-votes">${r.content.votes}</span>
+                        <button class="btn-vote-up" onclick=voteDown(${r.content.id})>
+                            <img src="../images/icon-minus.svg" />
+                        </button>
+                    </div>
+                    <div class="comment">
+                        <div class="comment-header">
+                            <div class="user-info">
+                                <div class="circle">
+                                    <img src="../images/avatars/image-${r.user.avatar}" />
+                                </div>
+                                <span class="name">${r.user.username}</span>
+                                
+                                ${r.user.id === loggedInUser.id ?
+                                
+                                    `<span class="you">you</span>`
+                                
+                                : ""}
+
+                                <span class="date">${r.content.createdAt}</span>
                             </div>
-                            <span class="name">${reply.user.username}</span>
+
+                            ${r.user.id === loggedInUser.id ?
                             
-                            ${reply.user.id === loggedInUser.id ?
+                                `
+                                    <div class="button-group">
+                                        <button class="btn btn-save-changes"><img src="../images/icon-save.svg" class="icon-save" /></button>
+                                        <button class="btn btn-delete" onclick=createDeleteModal(event, ${r.content.id})><img src="../images/icon-delete.svg" />Delete</button>
+                                    </div>
+                                `
+
+                            : `<button class="btn btn-reply"><img src="../images/icon-reply.svg" />Reply</button>`}       
+                                            
+                        </div>
+
+                        <div class="comment-body">
+
+                            ${r.user.id === loggedInUser.id ?
                             
-                                `<span class="you">you</span>`
+                                `<p contenteditable=true class="my-comment" spellcheck="false" onkeyup="editComment(event, ${r.content.id})">${r.content.comment}</p>`
+                            
+                            : `<p>${r.content.comment}</p>`}          
+
+                            ${numberOfLetters > 130 ? 
+                        
+                                `<div class="popover">${r.content.comment}</div>`
                             
                             : ""}
 
-                            <span class="date">${reply.content.createdAt}</span>
                         </div>
-
-                        ${reply.user.id === loggedInUser.id ?
-                        
-                            `
-                                <div class="button-group">
-                                        <button class="btn btn-delete" onclick=createDeleteModal(${reply.content.id})><img src="../images/icon-delete.svg" />Delete</button>
-                                </div>
-                            `
-
-                        : `<button class="btn btn-reply"><img src="../images/icon-reply.svg" />Reply</button>`}       
-                                         
                     </div>
+                `
 
-                    <div class="comment-body">
+                repliedCommentsContainer.appendChild(repliedComment)                                                    
+            })
 
-                        ${reply.user.id === loggedInUser.id ?
-                        
-                            `<p contenteditable=true class="my-comment" spellcheck="false" onkeyup=editComment(${reply.content.id})>${reply.content.comment}</p>`
-                        
-                        : `<p>${reply.content.comment}</p>`}          
-
-                        ${numberOfLetters > 130 ? 
-                    
-                            `<div class="popover">${d.content.comment}</div>`
-                        
-                        : ""}
-
-                    </div>
-                </div>
-            `
-
-            if (repliedCommentsContainer) {
-                repliedCommentsContainer.id = `replied-comments-${d.content.id}`
-                repliedCommentsContainer.className = "replied-comments"
-    
-                repliedCommentsContainer.appendChild(repliedComment)
-            }
-        
-            if (repliedCommentsContainer) {
-                comment.after(repliedCommentsContainer)
-            }
+            commentToAddReplyTo.after(repliedCommentsContainer)
         })
-    })
+    }
 }
 
 const deleteComment = id => {
@@ -216,7 +221,12 @@ const deleteComment = id => {
     const commentsFromLocalStorage = JSON.parse(localStorage.getItem("comments"))
     const newComments = commentsFromLocalStorage.filter(c => c.content?.id !== id)
 
-    localStorage.setItem("comments", JSON.stringify(newComments))
+    // localStorage.setItem("comments", JSON.stringify(newComments))
+
+    const repliesFromLocalStorage = JSON.parse(localStorage.getItem("replies"))
+    const newReplies = repliesFromLocalStorage.filter(r => r.commentRepliedToID !== id && r.userRepliedToID !== loggedInUser.id)
+
+    // localStorage.setItem("replies", JSON.stringify(newReplies))
 
     closeModal()
 }
@@ -277,6 +287,92 @@ const createDeleteModal = (id) => {
     document.body.appendChild(overlay)
 }
 
+const replyComment = e => {
+    const commentToReply = e.target.parentElement.parentElement.parentElement
+    const user = e.target.parentElement.firstChild.nextSibling.querySelector(".name").innerText
+    const id = commentToReply.id.split("-")[2]
+
+    const card = document.createElement("div")
+    card.className = "card new-comment reply-comment"
+    card.id = `reply-comment-${id}`
+
+    card.innerHTML = `
+        <div class="circle">
+            <img src="../images/avatars/image-${loggedInUser.avatar}" />
+        </div>
+        <textarea id="reply-${id}" spellcheck="false" placeholder="Reply to ${user}..."></textarea>
+        <button id="btn-reply-to-${id}" class="btn btn-reply-to" onclick="sendReply(event)">Reply</button>
+    `
+
+    commentToReply.after(card)
+}
+
+const sendReply = (e) => {
+    e = e || window.event
+    let target = e.target || e.srcElement
+
+    target = target.parentElement.previousElementSibling
+
+    const targetID = target.id.split("-")
+    const userRepliedToID = +targetID[1]
+    const commentRepliedToID = +targetID[2]
+
+    const reply = document.getElementById(`reply-${commentRepliedToID}`)
+
+    let arrayOfRepliesIDs = []
+    let lastReplyID = null
+    let newReplyID = null
+
+    const repliesFromLocalStorage = JSON.parse(localStorage.getItem("replies"))
+
+    repliesFromLocalStorage.forEach(r => {      
+
+        if (r.replies.length === 0) {
+            newReplyID = 1
+
+        } else {
+            r.replies.forEach(c => {
+                arrayOfRepliesIDs.push(c.content.id)
+            })
+    
+            lastReplyID = Math.max(...arrayOfRepliesIDs)
+            newReplyID = lastReplyID + 1
+        }
+    })
+
+    const replyComment = {
+        user: {
+            id: loggedInUser.id,
+            username: loggedInUser.username,
+            avatar: loggedInUser.avatar
+        },
+        content: {
+            id: newReplyID,
+            comment: reply.value,
+            createdAt: "Now",
+            votes: 0,
+            repliesBy: []
+        }
+    }
+
+    const commentReplies = {
+        commentRepliedToID: newReplyID,
+        userRepliedToID: loggedInUser.id,
+        replies: []
+    }
+
+    const commentToAddReplyTo = repliesFromLocalStorage.filter(r => r.commentRepliedToID === commentRepliedToID && r.userRepliedToID === userRepliedToID)
+    const restComments = repliesFromLocalStorage.filter(r => r.commentRepliedToID !== commentRepliedToID && r.userRepliedToID !== userRepliedToID)
+
+    commentToAddReplyTo[0].replies.push(replyComment)
+    const allReplies = [commentToAddReplyTo[0], ...restComments]
+    localStorage.setItem("replies", JSON.stringify(allReplies))
+
+    const replyComments = JSON.parse(localStorage.getItem("replies")) || [];
+    replyComments.push(commentReplies)
+    localStorage.setItem("replies", JSON.stringify(replyComments))
+}
+
 const closeModal = () => {
     document.querySelector(".overlay").remove()
 }
@@ -330,6 +426,12 @@ const addComment = () => {
                 repliesBy: []
             }
         }
+
+        const commentReplies = {
+            commentRepliedToID: newCommentID,
+            userRepliedToID: loggedInUser.id,
+            replies: []
+        }
     
         comment.innerHTML = `
             <div class="button-group-vote">
@@ -377,43 +479,125 @@ const addComment = () => {
         allComments.push(commentData)
 
         localStorage.setItem("comments", JSON.stringify(allComments))
+
+        const allReplies = JSON.parse(localStorage.getItem("replies")) || [];
+        allReplies.push(commentReplies)
+
+        localStorage.setItem("replies", JSON.stringify(allReplies))
     })
 }
 
-const editComment = (id) => {
+const editComment = (e, id) => {
+    e = e || window.event
+    let target = e.target || e.srcElement
+
     const comment = document.getElementById(`comment-${loggedInUser.id}-${id}`)
     const p = comment.querySelector(".comment-body p")
     const btnSave = comment.querySelector(".btn-save-changes")
 
     const commentsFromLocalStorage = JSON.parse(localStorage.getItem("comments"))
     const commentToEdit = commentsFromLocalStorage.filter(c => c.content.id === id)[0]
-    const rest = commentsFromLocalStorage.filter(c => c.content.id !== id)
+    const restComments = commentsFromLocalStorage.filter(c => c.content.id !== id)
 
-    if (p.textContent !== commentToEdit.content.comment) {
-        btnSave.classList.add("show-save")
+    const repliesFromLocalStorage = JSON.parse(localStorage.getItem("replies"))
+
+    if (commentToEdit) {
+        if (p.textContent !== commentToEdit.content.comment) {
+            btnSave.classList.add("show-save")
+        } else {
+            btnSave.classList.remove("show-save")
+        }
+
+        btnSave.addEventListener("click", () => {
+            const editedComment = { ...commentToEdit, content: { ...commentToEdit.content, comment: p.textContent }}
+    
+            const newComments = [editedComment, ...restComments].sort((a, b) => a.content.id - b?.content?.id)
+            localStorage.setItem("comments", JSON.stringify(newComments))
+    
+            btnSave.classList.remove("show-save")
+        })
+
     } else {
-        btnSave.classList.remove("show-save")
+        target = target.parentElement.parentElement.parentElement.parentElement.previousElementSibling
+
+        const targetID = target.id.split("-")
+        const userID = +targetID[1]
+        const commentID = +targetID[2]
+
+        const commentRepliedTo = repliesFromLocalStorage.filter(r => r.commentRepliedToID === commentID && r.userRepliedToID === userID)
+        const restComments = repliesFromLocalStorage.filter(r => r.commentRepliedToID !== commentID && r.userRepliedToID !== userID)
+        const replyToEdit = commentRepliedTo[0].replies.filter(r => r.content.id === id)
+        const restReplies = commentRepliedTo[0].replies.filter(r => r.content.id !== id)
+
+        if (p.textContent !== replyToEdit[0].content.comment) {
+            btnSave.classList.add("show-save")
+        } else {
+            btnSave.classList.remove("show-save")
+        }
+
+        const editedReply = { ...replyToEdit[0], content: { ...replyToEdit[0].content, comment: p.textContent }}
+        const newReplies = [editedReply, ...restReplies]
+
+        commentRepliedTo[0].replies.splice(0, commentRepliedTo[0].replies.length)
+        commentRepliedTo[0].replies.push(...newReplies)
+
+        const allReplies = [...commentRepliedTo, ...restComments]
+
+        btnSave.addEventListener("click", () => {
+            localStorage.setItem("replies", JSON.stringify(allReplies))
+    
+            btnSave.classList.remove("show-save")
+        })
     }
+}
 
-    btnSave.addEventListener("click", () => {
-        const editedComment = { ...commentToEdit, content: { ...commentToEdit.content, comment: p.textContent }}
+const createTextarea = () => {
+    const newComment = document.createElement("div")
+    newComment.id = "new-comment"
+    newComment.className = "card new-comment"
 
-        const newComments = [editedComment, ...rest].sort((a, b) => a.content.id - b?.content?.id)
-        localStorage.setItem("comments", JSON.stringify(newComments))
+    newComment.innerHTML = `
+    <div class="circle">
+        <img src="../images/avatars/image-${loggedInUser.avatar}" />
+    </div>
+    <textarea id="comment" spellcheck="false" placeholder="Add a comment..."></textarea>
+    <button id="btn-add-comment" class="btn btn-add">Add</button>
+    `
 
-        btnSave.classList.remove("show-save")
-    })
+    document.querySelector(".container").appendChild(newComment)
 }
 
 
 
 if  (JSON.parse(localStorage.getItem("comments")).length > 0) {
-    
-    const commentsFromLocalStorage = JSON.parse(localStorage.getItem("comments"))
 
-    drawComments(commentsFromLocalStorage)
+    const repliesData = JSON.parse(localStorage.getItem("replies"))
+    
+    const commentsData = JSON.parse(localStorage.getItem("comments"))
+
+    drawComments(commentsData, repliesData)
+}
+
+if  (JSON.parse(localStorage.getItem("replies")).length > 0) {
+
+    const commentsData = JSON.parse(localStorage.getItem("comments"))
+    
+    const repliesData = JSON.parse(localStorage.getItem("replies"))
+
+    drawReplies(repliesData, commentsData)
 }
 
 
 
+createTextarea()
+
+
+
 document.getElementById("btn-add-comment").addEventListener("click", addComment)
+
+document.addEventListener("click", e => {
+
+    if (e.target.classList.contains("btn-reply")) {
+        replyComment(e)
+    }
+})

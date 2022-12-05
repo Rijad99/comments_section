@@ -266,6 +266,7 @@ button img {
   margin-bottom: 2rem;
 }
 .comments .replied-comments {
+  width: 100%;
   padding: 0 0 1.5rem 0;
   display: none;
 }
@@ -273,7 +274,7 @@ button img {
   display: block;
 }
 
-#new-comment {
+.new-comment {
   margin-top: 1.5rem;
   width: calc(100% - 4rem);
   height: 100px;
@@ -281,14 +282,14 @@ button img {
   justify-content: space-between;
   align-items: center;
 }
-#new-comment .circle {
+.new-comment .circle {
   display: flex;
   align-items: center;
 }
-#new-comment .circle img {
+.new-comment .circle img {
   width: 3rem;
 }
-#new-comment textarea {
+.new-comment textarea {
   width: 100%;
   border: 1px solid hsl(223deg, 19%, 93%);
   resize: none;
@@ -299,23 +300,29 @@ button img {
   margin: 0 1.5rem;
   outline: none;
 }
-#new-comment textarea ::-moz-placeholder {
+.new-comment textarea ::-moz-placeholder {
   font-size: 0.75rem;
   font-family: "Poppins", sans-serif;
 }
-#new-comment textarea :-ms-input-placeholder {
+.new-comment textarea :-ms-input-placeholder {
   font-size: 0.75rem;
   font-family: "Poppins", sans-serif;
 }
-#new-comment textarea ::placeholder {
+.new-comment textarea ::placeholder {
   font-size: 0.75rem;
   font-family: "Poppins", sans-serif;
 }
-#new-comment .btn-add {
+.new-comment .btn-add, .new-comment .btn-reply-to {
   background-color: hsl(238deg, 40%, 52%);
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
   color: hsl(0deg, 0%, 100%);
+}
+
+.reply-comment {
+  width: 100%;
+  margin-top: 0 !important;
+  margin-bottom: 2rem !important;
 }
 
 .overlay {
